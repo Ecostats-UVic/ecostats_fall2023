@@ -1,0 +1,53 @@
+---
+title: "simplified_filepaths"
+output: html_notebook
+---
+
+Recap from simplified_filepathsc.R file:
+
+```{r}
+#Normally to import a data set, you would need to enter the entire file path
+#or you would need to ensure the file is in the same folder as your script
+
+#for me this filepath looks like this
+getwd()
+example_data <- read.csv("~/Dropbox/Documents/R_Scripts/Bates_Lab_Resources/Intro_Materials/example.csv")
+
+#Now when collaborating with people, this gets annoying because in order to import
+#this data yourself, you will have to update the filepath
+
+#To make it easier, open the project. This will set the working directory to the
+#location of the R Project.
+#Once I have the project open I only have to specify the path relative to the projects 
+#location, which means it will be the same for everyone who has downloaded 
+#the repo
+example_data_2 <- read.csv("Intro_Materials/example.csv")
+
+#This worked in the simplified_filepaths.R file, which is in the same folder as this .Rmd file, because the .R file used location of the R Project as the working directory. .Rmd files are different and take the location of the .Rmd file you are in to set the working directory.
+getwd()
+
+#This is fine if your files are in the same folder as the script, but what if we wanted to load something in a folder outside of the one where this .Rmd script is? 
+#For instance, the community_data.csv in the Permutation_Tests folder?
+#You could re-specify the working directory which would have to be re-specified for every text chunk
+#or you could add the file directory in full, but as discussed above, this does not allow for easy collaboration
+
+
+#To get around this I can use the here package to replace the file name. This packages use the location of the R Project as the start of the working directory, so you only have to specify the file location in relation to the R Project
+#First need to load the package here
+
+install.packages("here") #run if you have never installed this package before
+library(here) #you will need to load this package for every session
+
+#then every place where I need to specify a filepath I just replace with 
+# here("folders from project location", "file name")
+
+example_data_3 <- read.csv(here("Permutation_Tests", "community_data.csv"))
+
+#this is how I load all my data and even specify where to save figures or cleaned datafiles. 
+#occationally a package I load after the here package will mask some aspects and you will get an error. To avoid this I often specify which package the here function is coming from
+
+example_data_4 <- read.csv(here::here("Permutation_Tests", "community_data.csv")) #the here::here specifies that we are using the here function from the here package, so there are no confusions
+
+
+```
+
